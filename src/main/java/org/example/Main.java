@@ -1,34 +1,35 @@
 package org.example;
 
 import org.example.enums.LogLevel;
+import org.example.enums.SinkType;
 
 public class Main {
     public static void main(String[] args) {
 
         Logger logger = Logger.getLogger();
         //logger.setConfig(1, "FILE", "app.log");
-        // logger.setConfig(LogLevel.INFO, "CONSOLE", "","dd-MM-yyyy HH:mm:ss");
-        logger.setConfig(LogLevel.DEBUG, "CONSOLE", "", "");
+        // logger.setConfig(LogLevel.INFO, SinkType.CONSOLE, "","dd-MM-yyyy HH:mm:ss");
+        logger.setConfig(LogLevel.DEBUG, SinkType.CONSOLE, "", "");
         test(logger);
         System.out.println("===============");
 
-        logger.setConfig(LogLevel.INFO, "CONSOLE", "", "");
+        logger.setConfig(LogLevel.INFO, SinkType.CONSOLE, "", "");
         test(logger);
         System.out.println("===============");
 
-        logger.setConfig(LogLevel.WARN, "CONSOLE", "", "");
+        logger.setConfig(LogLevel.WARN, SinkType.CONSOLE, "", "");
         test(logger);
         System.out.println("===============");
 
-        logger.setConfig(LogLevel.ERROR, "CONSOLE", "", "");
+        logger.setConfig(LogLevel.ERROR, SinkType.CONSOLE, "", "");
         test(logger);
         System.out.println("===============");
 
-        logger.setConfig(LogLevel.FATAL, "CONSOLE", "", "");
+        logger.setConfig(LogLevel.FATAL, SinkType.CONSOLE, "", "");
         test(logger);
         System.out.println("===============");
 
-        logger.setConfig(LogLevel.INFO, "FILE", "app.log", "");
+        logger.setConfig(LogLevel.INFO, SinkType.FILE, "app.log", "");
         for(int i=0;i<1000;i++)
         test(logger);
     }

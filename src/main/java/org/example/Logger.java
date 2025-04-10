@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.enums.LogLevel;
+import org.example.enums.SinkType;
 import org.example.logger.AbstractLogger;
 
 import java.io.Serializable;
@@ -25,7 +26,7 @@ public class Logger implements Cloneable, Serializable {
                     logger = new Logger();
                     chainOfLogger = doChaining();
                     loggerObservable = new LoggerObservable();
-                    loggerConfig = new LoggerConfig(LogLevel.DEBUG, "CONSOLE", loggerObservable);
+                    loggerConfig = new LoggerConfig(LogLevel.DEBUG, SinkType.CONSOLE, loggerObservable);
                 }
             }
         }
@@ -60,7 +61,7 @@ public class Logger implements Cloneable, Serializable {
         createLog(LogLevel.FATAL, message);
     }
 
-    public void setConfig(LogLevel level, String sinkType, String filePath, String timeFormat) {
+    public void setConfig(LogLevel level, SinkType sinkType, String filePath, String timeFormat) {
         LoggerConfig.updateConfig(level, filePath, sinkType, timeFormat);
     }
 

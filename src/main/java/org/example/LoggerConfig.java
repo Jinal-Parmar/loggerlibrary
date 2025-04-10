@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.enums.LogLevel;
 import org.example.enums.SinkType;
+import org.example.enums.WriteMode;
 import org.example.logger.*;
 import org.example.sink.SinkObserver;
 
@@ -11,6 +12,7 @@ public class LoggerConfig {
     private static SinkType sinkType;
     private static LoggerObservable loggerObservable;
     public static String timeFormat = "yyyy-MM-dd HH:mm:ss";
+    private static WriteMode writeMode = WriteMode.SYNC; // Default to SYNC
 
 
     public LoggerConfig(LogLevel level, SinkType sinkType, LoggerObservable logObservable) {
@@ -36,11 +38,16 @@ public class LoggerConfig {
         return debugLogger;
     }
 
-    static void updateConfig(LogLevel level, String filePath, SinkType sinkType, String timeFormat) {
+    static void updateConfig(LogLevel level, String filePath, SinkType sinkType, String timeFormat, WriteMode writeMode) {
         addObservers(level, sinkType, filePath, loggerObservable);
         if (!timeFormat.isEmpty()) {
             LoggerConfig.timeFormat = timeFormat;
         }
+        LoggerConfig.writeMode = writeMode;
+    }
+
+    public static WriteMode getWriteMode() {
+        return writeMode;
     }
 
     static void addObservers(LogLevel level, SinkType sinkType, String filePath, LoggerObservable loggerObservable) {

@@ -2,9 +2,12 @@ package org.example;
 
 import org.example.enums.LogLevel;
 import org.example.enums.SinkType;
+import org.example.enums.WriteMode;
 import org.example.logger.AbstractLogger;
 
 import java.io.Serializable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.example.LoggerConfig.doChaining;
 
@@ -13,6 +16,7 @@ public class Logger implements Cloneable, Serializable {
     private volatile static AbstractLogger chainOfLogger;
     private volatile static LoggerObservable loggerObservable;
     private static LoggerConfig loggerConfig;
+    private static final ExecutorService executor = Executors.newFixedThreadPool(3); // Async pool
 
     private Logger() {
         if (logger != null)
@@ -61,12 +65,21 @@ public class Logger implements Cloneable, Serializable {
         createLog(LogLevel.FATAL, message);
     }
 
-    public void setConfig(LogLevel level, SinkType sinkType, String filePath, String timeFormat) {
-        LoggerConfig.updateConfig(level, filePath, sinkType, timeFormat);
+    public void setConfig(LogLevel level, SinkType sinkType, String filePath, String timeFormat, WriteMode writeMode) {
+        LoggerConfig.updateConfig(level, filePath, sinkType, timeFormat, writeMode);
     }
 
     private void createLog(LogLevel level, String message) {
         LogMessage logMessage = new LogMessage(message, level);
-        chainOfLogger.logMessage(logMessage, loggerObservable);
+
+        if (LoggerConfig.getWriteMode() == WriteMode.ASYNC) {
+            executor.submit(() -> chainOfLogger.logMessage(logMessage, loggerObservable));
+        } else {
+            chainOfLogger.logMessage(logMessage, loggerObservable);
+        }
+    }
+
+    public static void shutdown() {
+        executor.shutdown();
     }
 }
